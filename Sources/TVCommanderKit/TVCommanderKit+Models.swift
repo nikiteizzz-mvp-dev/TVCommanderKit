@@ -291,6 +291,7 @@ public struct TVRemoteCommand: Encodable {
             case guide = "KEY_GUIDE"
             case tools = "KEY_TOOLS"
             case info = "KEY_INFO"
+            case home = "KEY_HOME"
             case colorRed = "KEY_RED"
             case colorGreen = "KEY_GREEN"
             case colorYellow = "KEY_YELLOW"
