@@ -105,6 +105,38 @@ public class TVCommander: WebSocketDelegate {
         sendCommandOverWebSocket(.createTextInputCommand(text))
     }
 
+    public func moveTouchpad(deltaX: Int, deltaY: Int) {
+        guard isConnected else {
+            handleError(.remoteCommandNotConnectedToTV)
+            return
+        }
+        guard authStatus == .allowed else {
+            handleError(.remoteCommandAuthenticationStatusNotAllowed)
+            return
+        }
+        sendCommandOverWebSocket(.createTouchpadMoveCommand(deltaX: deltaX, deltaY: deltaY))
+    }
+
+    public func scrollTouchpad(deltaX: Int, deltaY: Int) {
+        guard isConnected else {
+            handleError(.remoteCommandNotConnectedToTV)
+            return
+        }
+        guard authStatus == .allowed else {
+            handleError(.remoteCommandAuthenticationStatusNotAllowed)
+            return
+        }
+        sendCommandOverWebSocket(.createTouchpadScrollCommand(deltaX: deltaX, deltaY: deltaY))
+    }
+
+    public func scrollTouchpadVertically(_ deltaY: Int) {
+        scrollTouchpad(deltaX: 0, deltaY: deltaY)
+    }
+
+    public func scrollTouchpadHorizontally(_ deltaX: Int) {
+        scrollTouchpad(deltaX: deltaX, deltaY: 0)
+    }
+
     private func sendCommandOverWebSocket(_ command: TVRemoteCommand) {
         commandQueue.append(command)
         if commandQueue.count == 1 {

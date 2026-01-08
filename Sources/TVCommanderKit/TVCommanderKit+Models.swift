@@ -214,6 +214,8 @@ public struct TVRemoteCommand: Encodable {
             case click
             case press
             case release
+            case move
+            case scroll
             case textInput(String)
 
             public init?(rawValue: String) {
@@ -228,8 +230,45 @@ public struct TVRemoteCommand: Encodable {
                     return "Press"
                 case .release:
                     return "Release"
+                case .move:
+                    return "Move"
+                case .scroll:
+                    return "Scroll"
                 case .textInput(let text):
                     return text
+                }
+            }
+        }
+
+        public enum DataOfCmd: Encodable, Equatable {
+            case controlKey(ControlKey)
+            case string(String)
+
+            public var controlKey: ControlKey? {
+                switch self {
+                case .controlKey(let key):
+                    return key
+                case .string:
+                    return nil
+                }
+            }
+
+            public var stringValue: String? {
+                switch self {
+                case .controlKey(let key):
+                    return key.rawValue
+                case .string(let value):
+                    return value
+                }
+            }
+
+            public func encode(to encoder: Encoder) throws {
+                var container = encoder.singleValueContainer()
+                switch self {
+                case .controlKey(let key):
+                    try container.encode(key.rawValue)
+                case .string(let value):
+                    try container.encode(value)
                 }
             }
         }
@@ -292,7 +331,7 @@ public struct TVRemoteCommand: Encodable {
         /// Command to be executed, e.g., "Click"
         public let cmd: Command
         /// Specific key data associated with the command
-        public let dataOfCmd: ControlKey
+        public let dataOfCmd: DataOfCmd
         /// Additional option that may modify the command's execution
         public let option: Bool
         /// Type of the remote control that the command applies to, e.g., "SendRemoteKey"
@@ -307,7 +346,14 @@ public struct TVRemoteCommand: Encodable {
 
         public init(cmd: Command, dataOfCmd: ControlKey, option: Bool, typeOfRemote: ControlType) {
             self.cmd = cmd
-            self.dataOfCmd = dataOfCmd
+            self.dataOfCmd = .controlKey(dataOfCmd)
+            self.option = option
+            self.typeOfRemote = typeOfRemote
+        }
+
+        public init(cmd: Command, dataOfCmd: String, option: Bool, typeOfRemote: ControlType) {
+            self.cmd = cmd
+            self.dataOfCmd = .string(dataOfCmd)
             self.option = option
             self.typeOfRemote = typeOfRemote
         }

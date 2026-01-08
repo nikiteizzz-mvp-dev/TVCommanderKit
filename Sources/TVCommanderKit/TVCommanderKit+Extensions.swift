@@ -243,6 +243,30 @@ extension TVRemoteCommand {
             )
         )
     }
+
+    static func createTouchpadMoveCommand(deltaX: Int, deltaY: Int) -> TVRemoteCommand {
+        TVRemoteCommand(
+            method: .control,
+            params: .init(
+                cmd: .move,
+                dataOfCmd: "\(deltaX),\(deltaY)",
+                option: false,
+                typeOfRemote: .mouseDevice
+            )
+        )
+    }
+
+    static func createTouchpadScrollCommand(deltaX: Int, deltaY: Int) -> TVRemoteCommand {
+        TVRemoteCommand(
+            method: .control,
+            params: .init(
+                cmd: .scroll,
+                dataOfCmd: "\(deltaX),\(deltaY)",
+                option: false,
+                typeOfRemote: .mouseDevice
+            )
+        )
+    }
 }
 
 
@@ -253,4 +277,3 @@ extension URL {
         absoluteString.removingPercentEncoding.flatMap(URL.init(string:))
     }
 }
-

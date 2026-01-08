@@ -176,7 +176,7 @@ final class TVCommanderTests: XCTestCase {
         tvCommander.sendRemoteCommand(key: .mute)
         wait(for: [expectation], timeout: 0.5)
         // then
-        XCTAssertEqual(command?.params.dataOfCmd, .mute)
+        XCTAssertEqual(command?.params.dataOfCmd.controlKey, .mute)
     }
 
     func test_sendCommand_multipleCommands_sentInOrder() {
@@ -193,7 +193,9 @@ final class TVCommanderTests: XCTestCase {
         expectation.expectedFulfillmentCount = keys.count
         var keysSent = [TVRemoteCommand.Params.ControlKey]()
         delegate.onTVCommanderRemoteCommand = {
-            keysSent.append($0.params.dataOfCmd)
+            if let key = $0.params.dataOfCmd.controlKey {
+                keysSent.append(key)
+            }
             expectation.fulfill()
         }
         keys.forEach { tvCommander.sendRemoteCommand(key: $0) }
