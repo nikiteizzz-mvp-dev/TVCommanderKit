@@ -273,6 +273,12 @@ public struct TVRemoteCommand: Encodable {
             case sourceTV = "KEY_DTV"
             case sourceHDMI = "KEY_HDMI"
             case contents = "KEY_CONTENTS"
+            case play = "KEY_PLAY"
+            case pause = "KEY_PAUSE"
+            case playPause = "KEY_PLAY_PAUSE"
+            case stop = "KEY_STOP"
+            case fastForward = "KEY_FF"
+            case rewind = "KEY_REWIND"
             case base64 = "base64" // Used for text input
         }
 
