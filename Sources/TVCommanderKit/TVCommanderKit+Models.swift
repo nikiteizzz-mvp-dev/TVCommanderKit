@@ -300,6 +300,7 @@ public struct TVRemoteCommand: Encodable {
             case volumeUp = "KEY_VOLUP"
             case volumeDown = "KEY_VOLDOWN"
             case mute = "KEY_MUTE"
+            case backspace = "KEY_BACKSPACE"
             case number0 = "KEY_0"
             case number1 = "KEY_1"
             case number2 = "KEY_2"
